@@ -1,0 +1,27 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="64" fill="#243B53" />
+  
+  <!-- Shadow of the inner card -->
+  <rect x="76" y="76" width="380" height="380" rx="32" fill="#F6D97A" />
+  
+  <!-- Inner White Card with Dark Border -->
+  <rect x="64" y="64" width="380" height="380" rx="32" fill="#FFFFFF" stroke="#243B53" stroke-width="20" />
+  
+  <!-- Habitix 'H' mark with integrated checkmark in Teal -->
+  <!-- Left pillar -->
+  <rect x="136" y="140" width="52" height="232" rx="12" fill="#243B53" />
+  
+  <!-- Right pillar -->
+  <rect x="324" y="140" width="52" height="232" rx="12" fill="#243B53" />
+  
+  <!-- Horizontal connector with Teal badge -->
+  <rect x="156" y="232" width="200" height="48" rx="8" fill="#62B6B7" stroke="#243B53" stroke-width="8" />
+  
+  <!-- Teal & Yellow Accent Checkmark badge -->
+  <circle cx="256" cy="256" r="44" fill="#62B6B7" stroke="#243B53" stroke-width="8" />
+  <path d="M236 256 L249 269 L278 238" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <!-- Small bottom-right spark -->
+  <circle cx="372" cy="120" r="14" fill="#E9786A" stroke="#243B53" stroke-width="6" />
+</svg>

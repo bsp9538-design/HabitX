@@ -1,0 +1,302 @@
+/* ==================================================
+   HABITIX DESIGN SYSTEM & TOKENS
+   "Build habits. Build yourself."
+   ================================================== */
+
+:root {
+  /* Brand Palette */
+  --primary-dark: #243B53;
+  --teal: #62B6B7;
+  --teal-hover: #509e9f;
+  --teal-light: #EBF7F7;
+  --coral: #E9786A;
+  --coral-hover: #D76556;
+  --coral-light: #FDF1EF;
+  --yellow: #F6D97A;
+  --yellow-hover: #E8CA65;
+  --yellow-light: #FEFAE8;
+
+  /* Surfaces & Backgrounds */
+  --bg-page: #F5F6F4;
+  --bg-card: #FFFFFF;
+  --bg-sidebar: #FFFFFF;
+
+  /* Typography Colors */
+  --text-primary: #243B53;
+  --text-secondary: #52606D;
+  --text-muted: #829AB1;
+  --text-on-dark: #FFFFFF;
+
+  /* Borders & Shadows */
+  --border-neutral: #CBD5E0;
+  --border-dark: #243B53;
+  --border-width: 2px;
+  --border-width-thick: 3px;
+  
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-pill: 9999px;
+
+  /* Hard offset shadows (NO BLUR) */
+  --shadow-sm: 2px 2px 0 var(--border-dark);
+  --shadow-md: 4px 4px 0 var(--border-dark);
+  --shadow-lg: 6px 6px 0 var(--border-dark);
+  --shadow-btn: 3px 3px 0 var(--border-dark);
+  --shadow-btn-hover: 4px 4px 0 var(--border-dark);
+  --shadow-btn-active: 1px 1px 0 var(--border-dark);
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Touch Target */
+  --touch-target-min: 44px;
+
+  /* Transitions */
+  --trans-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --trans-normal: 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Optional Dark Theme */
+[data-theme="dark"] {
+  --primary-dark: #F0F4F8;
+  --bg-page: #101B27;
+  --bg-card: #1A2836;
+  --bg-sidebar: #1A2836;
+
+  --text-primary: #F0F4F8;
+  --text-secondary: #9FB3C8;
+  --text-muted: #627D98;
+  --text-on-dark: #101B27;
+
+  --border-neutral: #334E68;
+  --border-dark: #62B6B7;
+
+  --teal-light: #163640;
+  --coral-light: #3D2322;
+  --yellow-light: #3B3317;
+
+  --shadow-sm: 2px 2px 0 #070D13;
+  --shadow-md: 4px 4px 0 #070D13;
+  --shadow-lg: 6px 6px 0 #070D13;
+  --shadow-btn: 3px 3px 0 #070D13;
+  --shadow-btn-hover: 4px 4px 0 #070D13;
+  --shadow-btn-active: 1px 1px 0 #070D13;
+}
+
+/* Base Reset & Typography */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-sans);
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+/* JetBrains Mono for numbers, metrics, times, percentages */
+.font-mono,
+.mono-num,
+.task-time,
+.streak-value,
+.stat-metric,
+.progress-percentage {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Interactive Elements & Buttons */
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+button {
+  cursor: pointer;
+  border: var(--border-width) solid var(--border-dark);
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: var(--touch-target-min);
+  padding: 8px 16px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-btn);
+  transition: transform var(--trans-fast), box-shadow var(--trans-fast), background-color var(--trans-fast);
+  text-decoration: none;
+  user-select: none;
+}
+
+button:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-btn-hover);
+}
+
+button:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: var(--shadow-btn-active);
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+  background: #E2E8F0;
+  border-color: #A0AEC0;
+}
+
+/* Button Variants */
+.btn-primary {
+  background-color: var(--teal);
+  color: #243B53;
+  border-color: var(--border-dark);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--teal-hover);
+}
+
+.btn-secondary {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border-dark);
+}
+
+.btn-destructive {
+  background-color: var(--coral);
+  color: #FFFFFF;
+  border-color: var(--border-dark);
+}
+
+.btn-destructive:hover:not(:disabled) {
+  background-color: var(--coral-hover);
+}
+
+.btn-yellow {
+  background-color: var(--yellow);
+  color: #243B53;
+  border-color: var(--border-dark);
+}
+
+.btn-yellow:hover:not(:disabled) {
+  background-color: var(--yellow-hover);
+}
+
+.btn-icon {
+  width: var(--touch-target-min);
+  height: var(--touch-target-min);
+  padding: 0;
+  flex-shrink: 0;
+}
+
+/* Card Styling (Physical Productivity Card Style) */
+.card {
+  background-color: var(--bg-card);
+  border: var(--border-width) solid var(--border-dark);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: 18px;
+  position: relative;
+}
+
+.card-teal-edge {
+  border-top: 5px solid var(--teal);
+}
+
+.card-coral-edge {
+  border-top: 5px solid var(--coral);
+}
+
+.card-yellow-edge {
+  border-top: 5px solid var(--yellow);
+}
+
+/* Pill Shapes (ONLY for badges, compact status labels, small tags) */
+.badge-pill {
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--border-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1.2;
+}
+
+/* Form Inputs */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+}
+
+.form-input,
+.form-select {
+  border: var(--border-width) solid var(--border-dark);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  padding: 10px 14px;
+  min-height: var(--touch-target-min);
+  outline: none;
+  font-size: 0.95rem;
+  box-shadow: 2px 2px 0 var(--border-dark);
+  transition: border-color var(--trans-fast), box-shadow var(--trans-fast);
+}
+
+.form-input:focus,
+.form-select:focus {
+  border-color: var(--teal);
+  box-shadow: 3px 3px 0 var(--teal);
+}
+
+/* Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "Habitix - Daily Routine & Habit Tracker",
+  "short_name": "Habitix",
+  "description": "Build habits. Build yourself. Personal timetable, habit tracker, and productivity dashboard for college students.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F5F6F4",
+  "theme_color": "#243B53",
+  "orientation": "portrait",
+  "categories": ["productivity", "education", "lifestyle"],
+  "icons": [
+    {
+      "src": "pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "pwa-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
