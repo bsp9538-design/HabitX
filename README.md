@@ -8,11 +8,13 @@ Habitix is a personal daily timetable, habit tracker, and productivity dashboard
 
 ## ✨ Key Features
 
-1. **Structured Student Timetable**:
-   - **Monday & Tuesday**: College (9:00 AM–4:00 PM), Gym + Shower, Coding Practice (8:10–10:00 PM), Assignments, Sleep routine.
-   - **Wednesday, Thursday & Friday**: College (9:00 AM–4:50 PM), Gym + Shower, Coding Practice (8:10–10:00 PM), Assignments, Sleep routine.
-   - **Saturday**: Morning & Evening Coding Practice, Projects / coding, Gym + Shower, Lunch & relax blocks.
-   - **Sunday**: Morning & Evening Coding Practice / revision, Weekly planning, College projects/assignments, Prepare for Monday.
+1. **Structured Student Timetable & In-Settings Customizer**:
+   - Initial defaults:
+     - **Monday & Tuesday**: College (9:00 AM–4:00 PM), Gym + Shower, Coding Practice (8:10–10:00 PM), Assignments, Sleep routine.
+     - **Wednesday, Thursday & Friday**: College (9:00 AM–4:50 PM), Gym + Shower, Coding Practice (8:10–10:00 PM), Assignments, Sleep routine.
+     - **Saturday**: Morning & Evening Coding Practice, Projects / coding, Gym + Shower, Lunch & relax blocks.
+     - **Sunday**: Morning & Evening Coding Practice / revision, Weekly planning, College projects/assignments, Prepare for Monday.
+   - **Settings → Edit Tasks**: Customize routines for any day (Monday through Sunday). Add, edit, delete, reorder tasks, and change names, start/end times, and categories. Restore defaults at any time with one click.
 
 2. **Real Calendar Date System**:
    - Independent daily progress per calendar date (`YYYY-MM-DD`). Progress on October 8 does not overwrite October 9.

@@ -8,9 +8,12 @@ import {
   Upload,
   Trash2,
   Smartphone,
+  Calendar,
+  ChevronRight,
 } from 'lucide-react';
 import { useHabitix } from '../context/useHabitix';
 import ResetConfirmModal from './ResetConfirmModal';
+import EditTasksView from './EditTasksView';
 import { exportDataAsJSON } from '../utils/storage';
 
 export default function SettingsView() {
@@ -24,6 +27,7 @@ export default function SettingsView() {
     installPwa,
   } = useHabitix();
 
+  const [isEditingTasks, setIsEditingTasks] = useState(false);
   const [isResetAllModalOpen, setIsResetAllModalOpen] = useState(false);
   const [importStatus, setImportStatus] = useState('');
   const fileInputRef = useRef(null);
@@ -60,9 +64,39 @@ export default function SettingsView() {
     e.target.value = '';
   };
 
+  // If user clicked "Edit Tasks", show the dedicated in-settings editor
+  if (isEditingTasks) {
+    return <EditTasksView onBack={() => setIsEditingTasks(false)} />;
+  }
+
   return (
     <div className="settings-view-wrapper">
-      {/* Visual & Interface Preferences */}
+      {/* 1. Custom Timetable & Schedule Section */}
+      <div className="card settings-section-card card-teal-edge">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+          <div className="settings-info-col" style={{ maxWidth: '580px' }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Calendar size={18} color="var(--teal)" />
+              <span>Edit Tasks & Timetable</span>
+            </h3>
+            <span className="settings-item-desc">
+              Customize your recurring daily routine for Monday through Sunday. Change task names, start & end times, categories, or reorder tasks.
+            </span>
+          </div>
+
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={() => setIsEditingTasks(true)}
+            style={{ padding: '10px 20px', fontSize: '0.92rem' }}
+          >
+            <span>Edit Tasks</span>
+            <ChevronRight size={16} />
+          </button>
+        </div>
+      </div>
+
+      {/* 2. Visual & Interface Preferences */}
       <div className="card settings-section-card">
         <h3 style={{ fontSize: '1.1rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '14px' }}>
           Appearance & Notifications
@@ -127,7 +161,7 @@ export default function SettingsView() {
         </div>
       </div>
 
-      {/* PWA & Mobile Installation */}
+      {/* 3. PWA & Mobile Installation */}
       <div className="card settings-section-card card-teal-edge">
         <h3 style={{ fontSize: '1.1rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '14px' }}>
           Progressive Web App (PWA)
@@ -160,7 +194,7 @@ export default function SettingsView() {
         </div>
       </div>
 
-      {/* Data Management & Backups */}
+      {/* 4. Data Management & Backups */}
       <div className="card settings-section-card">
         <h3 style={{ fontSize: '1.1rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '14px' }}>
           Data & Privacy
@@ -188,7 +222,7 @@ export default function SettingsView() {
           <div className="settings-info-col">
             <span className="settings-item-title">Export Routine Data</span>
             <span className="settings-item-desc">
-              Download your full habit checklist history as a JSON backup
+              Download your full habit checklist history and custom timetable as a JSON backup
             </span>
           </div>
 
@@ -207,7 +241,7 @@ export default function SettingsView() {
           <div className="settings-info-col">
             <span className="settings-item-title">Import Routine Data</span>
             <span className="settings-item-desc">
-              Restore previously exported habits and checklist history
+              Restore previously exported habits, custom timetable, and history
             </span>
           </div>
 

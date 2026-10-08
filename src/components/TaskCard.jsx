@@ -1,6 +1,6 @@
 import React from 'react';
 import { Check, Clock, Edit2, Trash2 } from 'lucide-react';
-import { CATEGORIES } from '../data/timetable';
+import { CATEGORIES, formatTaskTimeDisplay } from '../data/timetable';
 import { useHabitix } from '../context/useHabitix';
 
 export default function TaskCard({ task, onEdit }) {
@@ -51,7 +51,7 @@ export default function TaskCard({ task, onEdit }) {
         <div className="task-meta-row">
           <div className="task-time-badge font-mono">
             <Clock size={12} />
-            <span>{task.time}</span>
+            <span>{formatTaskTimeDisplay(task)}</span>
           </div>
 
           <span

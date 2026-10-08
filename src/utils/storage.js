@@ -1,7 +1,11 @@
-import { getDefaultTimetableForDay } from '../data/timetable.js';
+import {
+  getInitialDefaultTimetable,
+  DAY_KEYS,
+} from '../data/timetable.js';
 import { getDayIndex, getTodayISO, addDays } from './dateUtils.js';
 
 const STORAGE_KEY = 'habitix_records_v1';
+const TIMETABLE_STORAGE_KEY = 'habitix_custom_timetable_v1';
 const THEME_KEY = 'habitix_theme';
 const NOTIFICATIONS_KEY = 'habitix_notifications';
 
@@ -30,6 +34,69 @@ export function saveRecords(records) {
 }
 
 /**
+ * Load customized timetable from localStorage or initialize with defaults
+ */
+export function getStoredTimetable() {
+  try {
+    const raw = localStorage.getItem(TIMETABLE_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object') {
+        // Ensure all 7 days exist
+        const initial = getInitialDefaultTimetable();
+        let complete = true;
+        DAY_KEYS.forEach((k) => {
+          if (!Array.isArray(parsed[k])) {
+            parsed[k] = initial[k];
+            complete = false;
+          }
+        });
+        if (!complete) {
+          saveStoredTimetable(parsed);
+        }
+        return parsed;
+      }
+    }
+  } catch (err) {
+    console.error('Failed to read custom timetable from localStorage:', err);
+  }
+
+  // Fallback to initial defaults
+  const defaults = getInitialDefaultTimetable();
+  saveStoredTimetable(defaults);
+  return defaults;
+}
+
+/**
+ * Save customized timetable to localStorage
+ */
+export function saveStoredTimetable(timetable) {
+  try {
+    localStorage.setItem(TIMETABLE_STORAGE_KEY, JSON.stringify(timetable));
+  } catch (err) {
+    console.error('Failed to save custom timetable to localStorage:', err);
+  }
+}
+
+/**
+ * Restore default timetable without deleting user's checklist history or settings
+ */
+export function restoreDefaultTimetable() {
+  const defaults = getInitialDefaultTimetable();
+  saveStoredTimetable(defaults);
+  return defaults;
+}
+
+/**
+ * Get timetable tasks for a specific day of the week index (0 = Sun, 1 = Mon ... 6 = Sat)
+ */
+export function getTasksForDayFromTimetable(dayIndex, timetable = null) {
+  const currentTimetable = timetable || getStoredTimetable();
+  const dayKey = DAY_KEYS[dayIndex] || 'monday';
+  return currentTimetable[dayKey] || [];
+}
+
+/**
  * Get data record for a specific date
  */
 export function getRecordForDate(records, dateStr) {
@@ -37,20 +104,20 @@ export function getRecordForDate(records, dateStr) {
 }
 
 /**
- * Combine default timetable and custom tasks for a specific date
+ * Combine customized timetable tasks and date-specific custom tasks for a specific date
  */
-export function getAllTasksForDate(dateStr, customTasks = []) {
+export function getAllTasksForDate(dateStr, customTasks = [], timetable = null) {
   const dayIdx = getDayIndex(dateStr);
-  const defaultTasks = getDefaultTimetableForDay(dayIdx);
-  return [...defaultTasks, ...customTasks];
+  const baseTasks = getTasksForDayFromTimetable(dayIdx, timetable);
+  return [...baseTasks, ...customTasks];
 }
 
 /**
  * Calculate completion status for a given date
  */
-export function calculateDayProgress(records, dateStr) {
+export function calculateDayProgress(records, dateStr, timetable = null) {
   const record = getRecordForDate(records, dateStr);
-  const tasks = getAllTasksForDate(dateStr, record.customTasks || []);
+  const tasks = getAllTasksForDate(dateStr, record.customTasks || [], timetable);
   const total = tasks.length;
   
   if (total === 0) {
@@ -74,9 +141,9 @@ export function calculateDayProgress(records, dateStr) {
  * Calculate current streak and best streak
  * A day qualifies when completion percentage >= 80%
  */
-export function calculateStreakStats(records) {
+export function calculateStreakStats(records, timetable = null) {
   const todayStr = getTodayISO();
-  const todayProgress = calculateDayProgress(records, todayStr);
+  const todayProgress = calculateDayProgress(records, todayStr, timetable);
 
   let currentStreak = 0;
   let cursorDate = todayStr;
@@ -85,7 +152,7 @@ export function calculateStreakStats(records) {
     currentStreak = 1;
     cursorDate = addDays(todayStr, -1);
     while (true) {
-      const prog = calculateDayProgress(records, cursorDate);
+      const prog = calculateDayProgress(records, cursorDate, timetable);
       if (prog.qualified) {
         currentStreak++;
         cursorDate = addDays(cursorDate, -1);
@@ -96,12 +163,12 @@ export function calculateStreakStats(records) {
   } else {
     // Check if streak is still alive from yesterday
     cursorDate = addDays(todayStr, -1);
-    const yesterdayProgress = calculateDayProgress(records, cursorDate);
+    const yesterdayProgress = calculateDayProgress(records, cursorDate, timetable);
     if (yesterdayProgress.qualified) {
       currentStreak = 1;
       cursorDate = addDays(cursorDate, -1);
       while (true) {
-        const prog = calculateDayProgress(records, cursorDate);
+        const prog = calculateDayProgress(records, cursorDate, timetable);
         if (prog.qualified) {
           currentStreak++;
           cursorDate = addDays(cursorDate, -1);
@@ -121,11 +188,10 @@ export function calculateStreakStats(records) {
 
   // If there are recorded dates, evaluate consecutive days
   if (recordedDates.length > 0) {
-    // Collect all dates from first recorded date to today
     const earliestDate = recordedDates[0];
     let d = earliestDate;
     while (d <= todayStr) {
-      const prog = calculateDayProgress(records, d);
+      const prog = calculateDayProgress(records, d, timetable);
       if (prog.qualified) {
         tempStreak++;
         if (tempStreak > bestStreak) {
@@ -148,7 +214,7 @@ export function calculateStreakStats(records) {
 /**
  * Calculate real category consistency metrics based on recorded activity
  */
-export function calculateConsistencyMetrics(records, daysLookback = 14) {
+export function calculateConsistencyMetrics(records, daysLookback = 14, timetable = null) {
   const todayStr = getTodayISO();
   let totalCompletedAllTime = 0;
 
@@ -172,7 +238,7 @@ export function calculateConsistencyMetrics(records, daysLookback = 14) {
   for (let i = 0; i < daysLookback; i++) {
     const dStr = addDays(todayStr, -i);
     const record = getRecordForDate(records, dStr);
-    const tasks = getAllTasksForDate(dStr, record.customTasks || []);
+    const tasks = getAllTasksForDate(dStr, record.customTasks || [], timetable);
     const completedSet = new Set(record.completedIds || []);
 
     // Coding tasks for this date
@@ -248,14 +314,21 @@ export function saveNotificationPref(enabled) {
  */
 export function clearAllRecords() {
   localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(TIMETABLE_STORAGE_KEY);
 }
 
 /**
- * Export data to JSON string
+ * Export data to JSON string (includes both records and custom timetable)
  */
 export function exportDataAsJSON() {
   const records = getStoredRecords();
-  return JSON.stringify(records, null, 2);
+  const timetable = getStoredTimetable();
+  return JSON.stringify({
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    records,
+    customTimetable: timetable,
+  }, null, 2);
 }
 
 /**
@@ -266,6 +339,26 @@ export function importDataFromJSON(jsonString) {
   if (typeof parsed !== 'object' || parsed === null) {
     throw new Error('Invalid backup format');
   }
-  saveRecords(parsed);
-  return parsed;
+
+  let importedRecords = {};
+  let importedTimetable = null;
+
+  if (parsed.records && typeof parsed.records === 'object') {
+    importedRecords = parsed.records;
+    if (parsed.customTimetable && typeof parsed.customTimetable === 'object') {
+      importedTimetable = parsed.customTimetable;
+    }
+  } else {
+    importedRecords = parsed;
+  }
+
+  saveRecords(importedRecords);
+  if (importedTimetable) {
+    saveStoredTimetable(importedTimetable);
+  }
+
+  return {
+    records: importedRecords,
+    customTimetable: importedTimetable || getStoredTimetable(),
+  };
 }

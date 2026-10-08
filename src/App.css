@@ -953,3 +953,34 @@
     padding-bottom: 84px;
   }
 }
+
+/* ==================================================
+   EDIT TASKS & TIMETABLE EDITOR STYLES
+   ================================================== */
+.edit-tasks-view {
+  animation: modalPop 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.day-editor-section {
+  border-top: 5px solid var(--teal);
+}
+
+.task-editor-card {
+  border: var(--border-width) solid var(--border-dark);
+  border-radius: var(--radius-md);
+  transition: transform var(--trans-fast), box-shadow var(--trans-fast);
+}
+
+.task-editor-card:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--border-dark);
+}
+
+.task-editor-card[draggable="true"] {
+  cursor: grab;
+}
+
+.task-editor-card[draggable="true"]:active {
+  cursor: grabbing;
+}
+
